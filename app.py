@@ -33,6 +33,10 @@ cursor.execute('''
         reference VARCHAR(255)
     )
 ''')
+cursor.execute('CREATE INDEX destinationId_index ON records (destinationId);')
+cursor.execute('CREATE INDEX type_search_index ON records (type);')
+cursor.execute('CREATE INDEX time_search_index ON records (time);')
+cursor.execute('CREATE INDEX reference_search_index ON records (reference);')
 db.commit()
 cursor.close()
 db.close()
@@ -140,7 +144,7 @@ def get_aggregated_records():
     # Build dynamic WHERE clause
     filters.append("destinationId = %s")
     params.append(destination_id)
-    
+
     if start_time:
         filters.append("time >= %s")
         params.append(start_time)

@@ -39,7 +39,6 @@ The endpoints can be queried with any client like Postman.
 * Each incoming record has a unique `recordId`.
 * MySQL enforces uniqueness via `PRIMARY KEY`.
 * Attempted duplicates will fail insertion, ensuring **idempotency**.
-* Scales well with appropriate DB indexing and horizontal scaling (if needed).
 
 * Response format example:
 
@@ -71,6 +70,7 @@ The endpoints can be queried with any client like Postman.
 
   * `start_time`, `end_time`, `type`
 * Uses dynamic SQL to filter based on parameters.
+* Fields used in the `WHERE` clause are indexed to improve performance.
 * Records are grouped by `destinationId`, each group includes:
 
   * Matching records
@@ -119,6 +119,7 @@ The endpoints can be queried with any client like Postman.
 
   * Aggregated stats: `total_value`, `total_records`, `type`
   * Filtered by `destinationId` and `reference`
+  * Fields used in the `WHERE` clause are indexed to improve performance.
 * Allows a notification service to subscribe and consume updates per record insertion.
 
 ---
@@ -157,7 +158,6 @@ if value > threshold:
 ## 🧪 Future Enhancements
 
 * Add json validation to avoid hitting DB layer for malformed records.
-* Use background queues (e.g., Celery) to decouple Redis publishing from HTTP response.
 * Cache frequent aggregates in Redis for fast retrieval and also cache last N records to avoid duplicate messages from overloading DB.
 * Add authentication/authorization to the endpoints.
 * Configuration would be handled in a secure way, not hardcoded, that was just for simplicty.
