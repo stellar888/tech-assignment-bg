@@ -1,4 +1,4 @@
-import json
+import simplejson as json
 import mysql.connector
 from mysql.connector import Error
 from flask import Flask, request, jsonify
@@ -28,7 +28,7 @@ cursor.execute('''
         sourceId VARCHAR(255),
         destinationId VARCHAR(255),
         type ENUM('positive', 'negative'),
-        value INT,
+        value FLOAT,
         unit VARCHAR(64),
         reference VARCHAR(255)
     )
@@ -38,7 +38,7 @@ cursor.close()
 db.close()
 
 # Value threshold
-threshold = 100
+threshold = 100.00
 
 # Redis pub/sub notifier for new records
 def emit_record_created_notification(recordId, destinationId, reference, value):
