@@ -129,11 +129,18 @@ def get_aggregated_records():
     start_time = request.args.get('start_time')
     end_time = request.args.get('end_time')
     record_type = request.args.get('type')  # "positive" or "negative"
+    destination_id = request.args.get('destination_id')
+
+    if not destination_id:
+        return jsonify({"error": "Missing required parameter destinationId"}), 500
 
     filters = []
     params = []
 
     # Build dynamic WHERE clause
+    filters.append("destinationId = %s")
+    params.append(destination_id)
+    
     if start_time:
         filters.append("time >= %s")
         params.append(start_time)
