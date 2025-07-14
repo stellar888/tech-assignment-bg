@@ -1,13 +1,3 @@
-## Interview Assignment 
-
-This service is running on a AWS instance at:
-
-[http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/](http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/)
-
-The endpoints can be queried with any client like Postman.
-
----
-
 # 🧾 Transaction Processing Microservice – Documentation
 
 ## 📌 Overview
@@ -24,6 +14,12 @@ Built with:
 * **Flask** (Python) – Web framework
 * **MySQL** – Persistent storage
 * **Redis** – Pub/Sub messaging system
+
+This service is running on a AWS instance at:
+
+[http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/](http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/)
+
+The endpoints can be queried with any client like Postman.
 
 ---
 
@@ -79,6 +75,10 @@ Built with:
 
   * Matching records
   * A running `totalValue` sum
+* Request format example:
+
+[http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?type=positive&start_time=2025-06-01T00:00:00](http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?type=positive&start_time=2025-06-01T00:00:00)
+
 * Response format example:
 
 ```json
