@@ -27,7 +27,4 @@ services:
     depends_on:
       - redis
       - db
-      
-secrets:
-  db-password:
-    file: password.txt    
+

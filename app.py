@@ -37,9 +37,13 @@ db.commit()
 cursor.close()
 db.close()
 
+# Value threshold
+threshold = 100
+
 # Redis pub/sub notifier for new records
-def emit_record_created_notification(recordId, destinationId, reference):
+def emit_record_created_notification(recordId, destinationId, reference, value):
     channel = "record-stored-notification"
+    high_channel = "record-high-value-notification"
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
@@ -61,6 +65,10 @@ def emit_record_created_notification(recordId, destinationId, reference):
         # Publish result to Redis channel
         message = json.dumps(records)
         redis.publish(channel, message)
+
+        # Publish to high value channel if record is above set value
+        if value > threshold:
+            redis.publish(high_channel, message)
 
         cursor.close()
         conn.close()
@@ -107,7 +115,8 @@ def insert_json():
         return emit_record_created_notification(
             record.get("recordId"),
             record.get("destinationId"),
-            record.get("reference")
+            record.get("reference"),
+            record.get("value")
         )
 
     except Error as e:
