@@ -3,6 +3,7 @@ from unittest.mock import patch, MagicMock
 from app import app, threshold
 import json
 import datetime
+from decimal import Decimal
 
 class TestTransactionService(unittest.TestCase):
 
@@ -82,7 +83,7 @@ class TestTransactionService(unittest.TestCase):
 
         data = response.get_json()
         self.assertIn("otherdest", data)
-        self.assertEqual(data["otherdest"]["totalValue"], 111.6)
+        self.assertEqual(Decimal(data["otherdest"]["totalValue"]), round(Decimal(111.60), 2))
 
     @patch('app.mysql.connector.connect')
     @patch('app.redis.publish')
