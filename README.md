@@ -77,26 +77,36 @@ The endpoints can be queried with any client like Postman.
   * A running `totalValue` sum
 * Request format example:
 
-[http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?type=positive&start_time=2025-06-01T00:00:00](http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?type=positive&start_time=2025-06-01T00:00:00)
+[http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?destination_id=otherdest](http://ec2-51-21-255-162.eu-north-1.compute.amazonaws.com:8000/aggregated-records?destination_id=otherdest)
 
 * Response format example:
 
 ```json
 {
-    "deeestination": {
+    "otherdest": {
         "records": [
             {
-                "destinationId": "deeestination",
-                "recordId": "878bddkbb",
-                "reference": "dsfdfkjl23j4lk2j34",
+                "destinationId": "otherdest",
+                "recordId": "bbb333",
+                "reference": "someref123456",
                 "sourceId": "somesource",
                 "time": "Fri, 11 Jul 2025 17:19:45 GMT",
                 "type": "positive",
                 "unit": "euro",
-                "value": 55.0
+                "value": "88.89"
+            },
+            {
+                "destinationId": "otherdest",
+                "recordId": "kkk777",
+                "reference": "someref123456",
+                "sourceId": "somesource",
+                "time": "Fri, 11 Jul 2025 17:19:45 GMT",
+                "type": "positive",
+                "unit": "euro",
+                "value": "75.88"
             }
         ],
-        "totalValue": 55.0
+        "totalValue": "164.77"
     }
 }
 ```
