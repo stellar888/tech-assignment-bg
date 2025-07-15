@@ -46,7 +46,7 @@ db.close()
 threshold = 100.00
 
 # Redis pub/sub notifier for new records
-def emit_record_created_notification(recordId, destinationId, reference, value):
+def emit_record_created_notification(record):
     channel = "record-stored-notification"
     high_channel = "record-high-value-notification"
     try:
@@ -63,16 +63,19 @@ def emit_record_created_notification(recordId, destinationId, reference, value):
             WHERE destinationId = %s AND reference = %s
             GROUP BY destinationId, reference, type
         """
-        params = [destinationId, reference]
+        params = [record["destinationId"], record["reference"]]
         cursor.execute(query, params)
         records = cursor.fetchall()
+
+        # Add existing record to aggregation
+        records.append(record)
 
         # Publish result to Redis channel
         message = json.dumps(records)
         redis.publish(channel, message)
 
         # Publish to high value channel if record is above set value
-        if value > threshold:
+        if record["value"] > threshold:
             redis.publish(high_channel, message)
 
         cursor.close()
@@ -80,7 +83,7 @@ def emit_record_created_notification(recordId, destinationId, reference, value):
 
         return jsonify({
             "status": "success",
-            "inserted_record_id": recordId
+            "inserted_record_id": record["recordId"]
         }), 201
 
     except Error as e:
@@ -117,12 +120,7 @@ def insert_json():
         conn.close()
 
         # Emit pub/sub event after successful insert
-        return emit_record_created_notification(
-            record.get("recordId"),
-            record.get("destinationId"),
-            record.get("reference"),
-            record.get("value")
-        )
+        return emit_record_created_notification(record)
 
     except Error as e:
         return jsonify({"error": str(e)}), 500
