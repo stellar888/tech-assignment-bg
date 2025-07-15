@@ -1,4 +1,5 @@
 import simplejson as json
+from decimal import Decimal
 import mysql.connector
 from mysql.connector import Error
 from flask import Flask, request, jsonify
@@ -28,7 +29,7 @@ cursor.execute('''
         sourceId VARCHAR(255),
         destinationId VARCHAR(255),
         type ENUM('positive', 'negative'),
-        value FLOAT,
+        value DECIMAL(10,2),
         unit VARCHAR(64),
         reference VARCHAR(255)
     )
@@ -176,10 +177,10 @@ def get_aggregated_records():
             if dest_id not in grouped:
                 grouped[dest_id] = {
                     "records": [],
-                    "totalValue": 0.0
+                    "totalValue": Decimal(0.0)
                 }
             grouped[dest_id]["records"].append(record)
-            grouped[dest_id]["totalValue"] += float(record["value"]) if record["value"] else 0.0
+            grouped[dest_id]["totalValue"] += round(Decimal(record["value"]), 2) if record["value"] else 0.0
 
         cursor.close()
         conn.close()

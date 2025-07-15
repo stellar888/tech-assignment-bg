@@ -82,7 +82,7 @@ class TestTransactionService(unittest.TestCase):
 
         data = response.get_json()
         self.assertIn("otherdest", data)
-        self.assertEqual(data["otherdest"]["totalValue"], 111.6)
+        self.assertEqual(data["otherdest"]["totalValue"], 111.60)
 
     @patch('app.mysql.connector.connect')
     @patch('app.redis.publish')
